@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  app:
+    image: "w0rng/ai-talks:latest"
+    container_name: "ai-talks"
+    restart: unless-stopped
+    ports:
+      - "80:8501"
+    volumes:
+      - "./streamlit:/app/.streamlit"
