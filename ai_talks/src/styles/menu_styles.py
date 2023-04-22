@@ -25,7 +25,3 @@ HEADER_STYLES: Dict[str, Dict] = {
         "border": "1px solid #0E8388"
     }
 }
-
-FOOTER_STYLES: Dict[str, Dict] = {
-
-}

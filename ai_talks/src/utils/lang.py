@@ -39,22 +39,6 @@ class Locale:
     empty_api_handler: str
 
 
-AI_ROLE_OPTIONS_EN = [
-    "helpful assistant",
-    "code assistant",
-    "code reviewer",
-    "text improver",
-    "cinema expert",
-    "sport expert",
-    "online games expert",
-    "food recipes expert",
-    "English grammar expert",
-    "friendly and helpful teaching assistant",
-    "laconic assistant",
-    "helpful, pattern-following assistant",
-    "translate corporate jargon into plain English",
-]
-
 AI_ROLE_OPTIONS_RU = [
     "ассистент, который готов помочь",
     "ассистент программиста",
@@ -72,56 +56,6 @@ AI_ROLE_OPTIONS_RU = [
     "переводчик корпоративного жаргона на простой русский",
 ]
 
-readme_url = "https://github.com/dKosarevsky/AI-Talks#readme"
-ai_talks_url = "https://ai-talks.streamlit.app/"
-
-en = Locale(
-    ai_role_options=AI_ROLE_OPTIONS_EN,
-    ai_role_prefix="You are a female",
-    ai_role_postfix="Answer as concisely as possible.",
-    title="AI Talks",
-    language="English",
-    lang_code="en",
-    donates="Donates",
-    donates1="Russia",
-    donates2="World",
-    chat_placeholder="Start Your Conversation With AI:",
-    chat_run_btn="Ask",
-    chat_clear_btn="Clear",
-    chat_save_btn="Save",
-    speak_btn="Push to Speak",
-    input_kind="Input Kind",
-    input_kind_1="Text",
-    input_kind_2="Voice [test mode]",
-    select_placeholder1="Select Model",
-    select_placeholder2="Select Role",
-    select_placeholder3="Create Role",
-    radio_placeholder="Role Interaction",
-    radio_text1="Select",
-    radio_text2="Create",
-    stt_placeholder="To Hear The Voice Of AI Press Play",
-    footer_title="Support & Feedback",
-    footer_option0="Chat",
-    footer_option1="Info",
-    footer_option2="Donate",
-    footer_chat="AI Talks Chat",
-    footer_channel="AI Talks Channel",
-    responsibility_denial="""
-        `AI Talks` uses the `Open AI` API to interact with `ChatGPT`, an AI that generates information.
-        Please note that neural network responses may not be reliable, inaccurate or irrelevant.
-        We are not responsible for any consequences associated with the use or reliance on the information provided.
-        Use the received data at your discretion.
-    """,
-    donates_info="""
-        `AI Talks` collects donations solely for the purpose of paying for the `Open AI` API.
-        This allows you to provide access to communication with AI for all users.
-        Support us for joint development and interaction with the intelligence of the future!
-    """,
-    empty_api_handler=f"""
-        API key not found. Create `.streamlit/secrets.toml` with your API key.
-        See [README.md]({readme_url}) for instructions or use the original [AI Talks]({ai_talks_url}).
-    """,
-)
 ru = Locale(
     ai_role_options=AI_ROLE_OPTIONS_RU,
     ai_role_prefix="Вы девушка",
@@ -167,6 +101,5 @@ ru = Locale(
     """,
     empty_api_handler=f"""
         Ключ API не найден. Создайте `.streamlit/secrets.toml` с вашим ключом API.
-        Инструкции см. в [README.md]({readme_url}) или используйте оригинальный [AI Talks]({ai_talks_url}).
     """,
 )

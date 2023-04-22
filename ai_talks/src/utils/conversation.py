@@ -1,12 +1,9 @@
 import streamlit as st
 from openai.error import InvalidRequestError, OpenAIError
 from requests.exceptions import TooManyRedirects
-from streamlit_chat import message
-
 from src.utils.agi.bard import BardChat
 from src.utils.agi.chat_gpt import create_gpt_completion
-from src.utils.stt import show_voice_input
-from src.utils.tts import show_audio_player
+from streamlit_chat import message
 
 
 def clear_chat() -> None:
@@ -21,13 +18,7 @@ def show_text_input() -> None:
 
 
 def get_user_input():
-    match st.session_state.input_kind:
-        case st.session_state.locale.input_kind_1:
-            show_text_input()
-        case st.session_state.locale.input_kind_2:
-            show_voice_input()
-        case _:
-            show_text_input()
+    show_text_input()
 
 
 def show_chat_buttons() -> None:
@@ -63,7 +54,6 @@ def show_gpt_conversation() -> None:
         if ai_content:
             show_chat(ai_content, st.session_state.user_text)
             st.divider()
-            show_audio_player(ai_content)
     except InvalidRequestError as err:
         if err.code == "context_length_exceeded":
             st.session_state.messages.pop(1)
