@@ -3,7 +3,7 @@ from pathlib import Path
 
 import openai
 import streamlit as st
-from src.utils.conversation import show_chat_buttons, show_conversation
+from src.utils.conversation import get_balance, show_chat_buttons, show_conversation
 from src.utils.lang import ru
 
 openai.api_key = getenv("API_KEY")
@@ -11,19 +11,10 @@ openai.api_key = getenv("API_KEY")
 # --- PATH SETTINGS ---
 current_dir: Path = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 css_file: Path = current_dir / "src/styles/.css"
-assets_dir: Path = current_dir / "assets"
-icons_dir: Path = assets_dir / "icons"
-img_dir: Path = assets_dir / "img"
-tg_svg: Path = icons_dir / "tg.svg"
-
 # --- GENERAL SETTINGS ---
-PAGE_TITLE: str = "AI Talks"
-PAGE_ICON: str = "🤖"
-LANG_EN: str = "En"
-LANG_RU: str = "Ru"
 AI_MODEL_OPTIONS = [i["id"] for i in openai.Model.list().get("data")]
 
-st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
+st.set_page_config(page_title=ru.page_title, page_icon=ru.page_icon)
 
 # --- LOAD CSS ---
 with open(css_file) as f:
@@ -44,13 +35,19 @@ if "user_text" not in st.session_state:
 
 
 def main() -> None:
+    balance = get_balance()
+    if balance != -1:
+        l, p = st.columns([1, 4])
+        with l, p:
+            l.text(ru.balance_handler)
+            p.progress(balance)
     c1, c2 = st.columns(2)
     with c1, c2:
         c1.selectbox(
             label=st.session_state.locale.select_placeholder1,
             key="model",
             options=AI_MODEL_OPTIONS,
-            index=AI_MODEL_OPTIONS.index("gpt-3.5-turbo"),
+            index=AI_MODEL_OPTIONS.index(ru.default_model),
         )
         c2.selectbox(
             label=st.session_state.locale.select_placeholder2,

@@ -1,6 +1,8 @@
 from hashlib import sha256
+from os import getenv
 from string import punctuation
 
+import requests
 import streamlit as st
 from openai.error import InvalidRequestError, OpenAIError
 from requests.exceptions import TooManyRedirects
@@ -28,6 +30,19 @@ def show_chat_buttons() -> None:
             on_click=clear_chat,
             use_container_width=True,
         )
+
+
+def get_balance() -> float:
+    session = getenv("OPENAI_SESSION")
+    if not session:
+        return -1
+    try:
+        data = requests.get(
+            "https://api.openai.com/dashboard/billing/credit_grants", headers={"Authorization": f"Bearer {session}"}
+        ).json()["grants"]["data"][0]
+        return (data["grant_amount"] - data["used_amount"]) / data["grant_amount"]
+    except:
+        return -1
 
 
 def show_chat(ai_content: str, user_text: str) -> None:
