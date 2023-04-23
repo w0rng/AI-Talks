@@ -1,9 +1,9 @@
 import logging
+from os import getenv
 from typing import List  # NOQA: UP035
 
 import openai
 import streamlit as st
-from os import getenv
 
 
 @st.cache_data()

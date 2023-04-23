@@ -1,8 +1,12 @@
+from os import getenv
 from pathlib import Path
 
+import openai
 import streamlit as st
 from src.utils.conversation import get_user_input, show_chat_buttons, show_conversation
 from src.utils.lang import ru
+
+openai.api_key = getenv("API_KEY")
 
 # --- PATH SETTINGS ---
 current_dir: Path = Path(__file__).parent if "__file__" in locals() else Path.cwd()
@@ -17,12 +21,7 @@ PAGE_TITLE: str = "AI Talks"
 PAGE_ICON: str = "🤖"
 LANG_EN: str = "En"
 LANG_RU: str = "Ru"
-AI_MODEL_OPTIONS: list[str] = [
-    "gpt-3.5-turbo",
-    # "gpt-4",
-    "gpt-4-32k",
-    "bard",
-]
+AI_MODEL_OPTIONS = [i["id"] for i in openai.Model.list().get("data")]
 
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 
@@ -51,6 +50,7 @@ def main() -> None:
             label=st.session_state.locale.select_placeholder1,
             key="model",
             options=AI_MODEL_OPTIONS,
+            index=AI_MODEL_OPTIONS.index("gpt-3.5-turbo"),
         )
         c2.selectbox(
             label=st.session_state.locale.select_placeholder2,
