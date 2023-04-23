@@ -1,9 +1,14 @@
+from hashlib import sha256
+from string import punctuation
+
 import streamlit as st
 from openai.error import InvalidRequestError, OpenAIError
 from requests.exceptions import TooManyRedirects
 from src.utils.agi.bard import BardChat
 from src.utils.agi.chat_gpt import create_gpt_completion
 from streamlit_chat import message
+
+new_punctuation = "".join([i for i in punctuation if i not in ".,!?:'"])
 
 
 def clear_chat() -> None:
@@ -41,9 +46,15 @@ def show_chat(ai_content: str, user_text: str) -> None:
         st.session_state.generated.append(ai_content)
     if st.session_state.generated:
         for i in range(len(st.session_state.generated)):
-            message(st.session_state.past[i], is_user=True, key=str(i) + "_user", avatar_style="micah")
-            message("", key=str(i))
-            st.markdown(st.session_state.generated[i])
+            user_input = st.session_state.past[i]
+            ai_answer = st.session_state.generated[i]
+            seed = int(sha256(user_input.encode()).hexdigest(), base=16) % 10**3
+            message(user_input, is_user=True, key=str(i) + "_user", avatar_style="micah", seed=seed)
+            if any(p in st.session_state.generated[i] for p in new_punctuation):
+                message("", key=str(i), seed=seed)
+                st.markdown(ai_answer)
+            else:
+                message(ai_answer, key=str(i), seed=seed)
 
 
 def show_gpt_conversation() -> None:
