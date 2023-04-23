@@ -18,19 +18,16 @@ def clear_chat() -> None:
     st.session_state.user_text = ""
 
 
-def show_text_input() -> None:
-    st.text_area(label=st.session_state.locale.chat_placeholder, value=st.session_state.user_text, key="user_text")
-
-
-def get_user_input():
-    show_text_input()
-
-
 def show_chat_buttons() -> None:
-    b0, b1 = st.columns(2)
+    st.text_area(label=st.session_state.locale.chat_placeholder, value=st.session_state.user_text, key="user_text")
+    b0, b1 = st.columns([3, 1])
     with b0, b1:
-        b0.button(label=st.session_state.locale.chat_run_btn)
-        b1.button(label=st.session_state.locale.chat_clear_btn, on_click=clear_chat)
+        b0.button(label=st.session_state.locale.chat_run_btn, use_container_width=True)
+        b1.button(
+            label=st.session_state.locale.chat_clear_btn,
+            on_click=clear_chat,
+            use_container_width=True,
+        )
 
 
 def show_chat(ai_content: str, user_text: str) -> None:

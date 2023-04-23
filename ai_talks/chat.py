@@ -3,7 +3,7 @@ from pathlib import Path
 
 import openai
 import streamlit as st
-from src.utils.conversation import get_user_input, show_chat_buttons, show_conversation
+from src.utils.conversation import show_chat_buttons, show_conversation
 from src.utils.lang import ru
 
 openai.api_key = getenv("API_KEY")
@@ -61,7 +61,6 @@ def main() -> None:
     if st.session_state.user_text:
         show_conversation()
         st.session_state.user_text = ""
-    get_user_input()
     show_chat_buttons()
 
 
