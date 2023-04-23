@@ -1,9 +1,11 @@
 from hashlib import sha256
 from os import getenv
 from string import punctuation
+from typing import Dict
 
 import requests
 import streamlit as st
+import yaml
 from openai.error import InvalidRequestError, OpenAIError
 from requests.exceptions import TooManyRedirects
 from src.utils.agi.bard import BardChat
@@ -92,11 +94,17 @@ def show_bard_conversation() -> None:
         st.error(err)
 
 
+def get_promts() -> Dict[str, str]:
+    with open("promts.yml") as f:
+        templates = yaml.safe_load(f)
+        return {templates["name"]: templates["text"] for templates in templates["promts"]}
+
+
 def show_conversation() -> None:
     if st.session_state.messages:
         st.session_state.messages.append({"role": "user", "content": st.session_state.user_text})
     else:
-        ai_role = f"{st.session_state.locale.ai_role_prefix} {st.session_state.role}. {st.session_state.locale.ai_role_postfix}"  # NOQA: E501
+        ai_role = get_promts()[st.session_state.role].replace("{text}", st.session_state.user_text)
         st.session_state.messages = [
             {"role": "system", "content": ai_role},
             {"role": "user", "content": st.session_state.user_text},

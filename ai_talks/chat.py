@@ -3,7 +3,7 @@ from pathlib import Path
 
 import openai
 import streamlit as st
-from src.utils.conversation import get_balance, show_chat_buttons, show_conversation
+from src.utils.conversation import get_balance, get_promts, show_chat_buttons, show_conversation
 from src.utils.lang import ru
 
 openai.api_key = getenv("API_KEY")
@@ -52,7 +52,7 @@ def main() -> None:
         c2.selectbox(
             label=st.session_state.locale.select_placeholder2,
             key="role",
-            options=st.session_state.locale.ai_role_options,
+            options=get_promts().keys(),
         )
 
     if st.session_state.user_text:

@@ -131,3 +131,5 @@ dmypy.json
 .idea
 *secrets.toml
 .ruff_cache
+
+./promts.yml
