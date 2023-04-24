@@ -7,17 +7,17 @@ import streamlit as st
 
 
 @st.cache_data()
-def create_gpt_completion(ai_model: str, messages: List[dict]) -> dict:
+def create_gpt_completion(messages: List[dict], promt) -> dict:
     try:
         openai.api_key = getenv("API_KEY")
     except (KeyError, AttributeError):
         st.error(st.session_state.locale.empty_api_handler)
     logging.info(f"{messages=}")
     completion = openai.ChatCompletion.create(
-        model=ai_model,
+        model=promt.model,
         messages=messages,
-        # stream=True,
-        # temperature=0.7,
+        temperature=promt.temperature,
+        max_tokens=promt.max_tokens,
     )
     logging.info(f"{completion=}")
     return completion

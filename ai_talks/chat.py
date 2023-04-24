@@ -39,7 +39,7 @@ def main() -> None:
     if balance != -1:
         l, p = st.columns([1, 4])
         with l, p:
-            l.text(ru.balance_handler)
+            l.text(ru.balance_handler + f" {balance:.2f}/1 : ")
             p.progress(balance)
     c1, c2 = st.columns(2)
     with c1, c2:

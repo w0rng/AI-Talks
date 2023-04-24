@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from hashlib import sha256
 from os import getenv
 from string import punctuation
@@ -13,6 +14,27 @@ from src.utils.agi.chat_gpt import create_gpt_completion
 from streamlit_chat import message
 
 new_punctuation = "".join([i for i in punctuation if i not in ".,!?:'"])
+
+
+@dataclass
+class Promt:
+    name: str
+    text: str
+    temperature: float = 1.0
+    model: str | None = None
+    max_tokens: int = 500
+
+
+def get_promts() -> Dict[str, Promt]:
+    with open("promts.yml") as f:
+        templates = yaml.safe_load(f)
+        return {templates["name"]: Promt(**templates) for templates in templates["promts"]}
+
+
+def get_promt() -> Promt:
+    promt = get_promts()[st.session_state.role]
+    promt.model = promt.model if promt.model else st.session_state.model
+    return promt
 
 
 def clear_chat() -> None:
@@ -67,7 +89,8 @@ def show_chat(ai_content: str, user_text: str) -> None:
 
 def show_gpt_conversation() -> None:
     try:
-        completion = create_gpt_completion(st.session_state.model, st.session_state.messages)
+        promt = get_promt()
+        completion = create_gpt_completion(st.session_state.messages, promt)
         ai_content = completion.get("choices")[0].get("message").get("content")
         st.session_state.messages.append({"role": "assistant", "content": ai_content})
         if ai_content:
@@ -94,17 +117,12 @@ def show_bard_conversation() -> None:
         st.error(err)
 
 
-def get_promts() -> Dict[str, str]:
-    with open("promts.yml") as f:
-        templates = yaml.safe_load(f)
-        return {templates["name"]: templates["text"] for templates in templates["promts"]}
-
-
 def show_conversation() -> None:
     if st.session_state.messages:
         st.session_state.messages.append({"role": "user", "content": st.session_state.user_text})
     else:
-        ai_role = get_promts()[st.session_state.role].replace("{text}", st.session_state.user_text)
+        promt = get_promt()
+        ai_role = promt.text.replace("{text}", st.session_state.user_text)
         st.session_state.messages = [
             {"role": "system", "content": ai_role},
             {"role": "user", "content": st.session_state.user_text},
