@@ -1,13 +1,12 @@
 import logging
 from os import getenv
-from typing import List  # NOQA: UP035
 
 import openai
 import streamlit as st
 
 
 @st.cache_data()
-def create_gpt_completion(messages: List[dict], promt) -> dict:
+def create_gpt_completion(messages: list[dict], promt) -> dict:
     try:
         openai.api_key = getenv("API_KEY")
     except (KeyError, AttributeError):

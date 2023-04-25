@@ -2,16 +2,14 @@ from dataclasses import dataclass
 from hashlib import sha256
 from os import getenv
 from string import punctuation
-from typing import Dict
 
 import requests
 import streamlit as st
 import yaml
 from openai.error import InvalidRequestError, OpenAIError
-from requests.exceptions import TooManyRedirects
-from src.utils.agi.bard import BardChat
-from src.utils.agi.chat_gpt import create_gpt_completion
 from streamlit_chat import message
+
+from .chat_gpt import create_gpt_completion
 
 new_punctuation = "".join([i for i in punctuation if i not in ".,!?:'"])
 
@@ -25,7 +23,7 @@ class Promt:
     max_tokens: int = 500
 
 
-def get_promts() -> Dict[str, Promt]:
+def get_promts() -> dict[str, Promt]:
     with open("promts.yml") as f:
         templates = yaml.safe_load(f)
         return {templates["name"]: Promt(**templates) for templates in templates["promts"]}
@@ -108,15 +106,6 @@ def show_gpt_conversation() -> None:
         st.error(err)
 
 
-def show_bard_conversation() -> None:
-    try:
-        bard = BardChat(st.secrets.api_credentials.bard_session)
-        ai_content = bard.ask(st.session_state.user_text)
-        st.warning(ai_content.get("content"))
-    except (TooManyRedirects, AttributeError) as err:
-        st.error(err)
-
-
 def show_conversation() -> None:
     if st.session_state.messages:
         st.session_state.messages.append({"role": "user", "content": st.session_state.user_text})
@@ -127,7 +116,4 @@ def show_conversation() -> None:
             {"role": "system", "content": ai_role},
             {"role": "user", "content": st.session_state.user_text},
         ]
-    if st.session_state.model == "bard":
-        show_bard_conversation()
-    else:
-        show_gpt_conversation()
+    show_gpt_conversation()
