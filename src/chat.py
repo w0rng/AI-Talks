@@ -6,6 +6,14 @@ import streamlit as st
 from utils.conversation import get_balance, get_promts, show_chat_buttons, show_conversation
 from utils.lang import ru
 
+if SENTRY := getenv("SENTRY_DSN"):
+    import sentry_sdk
+
+    sentry_sdk.init(
+        dsn=SENTRY,
+        traces_sample_rate=1.0,
+    )
+
 openai.api_key = getenv("API_KEY")
 
 current_dir: Path = Path(__file__).parent if "__file__" in locals() else Path.cwd()

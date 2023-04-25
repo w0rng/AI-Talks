@@ -2,3 +2,4 @@ streamlit==1.21.0
 streamlit-chat==0.0.2.2
 openai==0.27.4
 PyYAML==6.0.0
+sentry-sdk==1.20.0
