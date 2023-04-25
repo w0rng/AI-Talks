@@ -8,12 +8,9 @@ from utils.lang import ru
 
 openai.api_key = getenv("API_KEY")
 
-# --- PATH SETTINGS ---
 current_dir: Path = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-css_file: Path = current_dir / "src/styles/.css"
-# --- GENERAL SETTINGS ---
+css_file: Path = current_dir / "styles/.css"
 AI_MODEL_OPTIONS = [i["id"] for i in openai.Model.list().get("data")]
-
 st.set_page_config(page_title=ru.page_title, page_icon=ru.page_icon)
 
 # --- LOAD CSS ---
