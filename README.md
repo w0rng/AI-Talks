@@ -10,5 +10,5 @@ Enhance your ChatGPT experience with our user-friendly API wrapper, featuring a 
 ## Setup
 
 1. Add API key to `.env` file:
-2. Clone the docker-compose file
+2. Clone the docker-compose file and promts.yml file
 3. Run `docker-compose up -d` to start the container
